@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
+	
+<ui:composition template="/resources/master.xhtml">
+	<ui:define name="title">Nuevo Paquete</ui:define>
+	<ui:define name="content">
+	<div class="inputForm"><h:form>
+		<h:panelGrid columns="3" columnClasses="form-label,form-input,form-message error" footerClass="form-footer">
+			<h:outputLabel value="Nombre" for="nombre" />
+			<h:inputText id="nombre" value="#{crearPaquete.paquete.nombre}"/>
+			<h:message for="nombre"/>
+			<h:outputLabel value="descripcion" for="descripcion" />
+			<h:inputText id="descripcion" value="#{crearPaquete.paquete.descripcion}" />
+			<h:message for="descripcion"/>
+			<h:outputLabel value="fechaDesde" for="fechaDesde" />
+			<h:inputDate id="fechaDesde" value="#{crearPaquete.paquete.fechaDesde}" />
+			<h:message for="fechaDesde"/>
+			<h:outputLabel value="fechaHasta" for="fechaHasta" />
+			<h:inputDate id="fechaHasta" value="#{crearPaquete.paquete.fechaHasta}" />
+			<h:message for="fechaHasta"/>
+			<h:outputLabel value="agencia" for="agencia" />
+			<h:inputText id="agencia" value="#{crearPaquete.paquete.agencia}" />
+			<h:message for="agencia"/>
+			<h:outputLabel value="destino" for="destino" />
+			<h:inputText id="destino" value="#{crearPaquete.paquete.destino}" />
+			<h:message for="destino"/>
+			<h:outputLabel value="cupo" for="cupo" />
+			<h:inputText id="cupo" value="#{crearPaquete.paquete.cupo}" />
+			<h:message for="cupo"/>
+			<h:outputLabel value="Batch input?" for="batch" title="Crear otro Paquete despues de esta?"/>
+			<h:selectBooleanCheckbox id="batch" value="#{crearPaquete.batch}" />
+			<f:facet name="footer"><h:commandButton value="Submit" action="#{crearPaquete.persist}" /></f:facet>
+		</h:panelGrid>
+	</h:form></div>
+	<div class="result"><h:outputText rendered="#{not empty crearPaquete.lastResult}" styleClass="#{crearPaquete.success}" value="#{crearPaquete.lastResult}" /></div>
+	</ui:define>
+</ui:composition>
+</html>
