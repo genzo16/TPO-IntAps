@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/resources/master.xhtml">
+	<ui:define name="metadata">
+	<f:metadata>
+		<f:viewParam name="id" value="#{agenciaPage.agenciaId}" />
+		<f:event type="preRenderView" listener="#{agenciaPage.ensureInitialized}" />
+	</f:metadata>
+	</ui:define>
+	<ui:define name="title">Agencia #{agenciaPage.agencia.nombre}</ui:define>
+	<ui:define name="content">
+	<div class="details"><h2>#{agenciaPage.agencia.nombre}</h2>
+	<h:panelGrid columns="2" columnClasses="label, value" styleClass="details-table">
+		Nombre
+		<h:outputText value="#{agenciaPage.agencia.nombre}" />
+		Descripcion
+		<h:outputText value="#{agenciaPage.agencia.descripcion}" />
+	</h:panelGrid></div>
+	</ui:define>
+</ui:composition>
+</html>
