@@ -6,16 +6,9 @@ import javax.ejb.EJBException;
 import javax.faces.bean.ManagedBean;
 
 import de.unimuenster.pi.library.ejb.AgenciaService;
-import de.unimuenster.pi.library.ejb.BookService;
 import de.unimuenster.pi.library.jpa.Agencia;
-import de.unimuenster.pi.library.jpa.Book;
 import de.unimuenster.pi.library.web.Util;
 
-/**
- * Backing bean for the create book page.
- * @author Henning Heitkoetter
- *
- */
 @ManagedBean
 public class CrearAgencia {
 	private Agencia agencia;
@@ -42,7 +35,7 @@ public class CrearAgencia {
 		this.batch = batch;
 	}
 	
-	public String persist(){
+	public String persist() throws Exception{
 		// Action
 		try{
 			lastAgencia = agenciaService.crearAgencia(getAgencia());

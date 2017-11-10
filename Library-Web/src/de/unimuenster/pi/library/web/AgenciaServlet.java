@@ -15,17 +15,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import de.unimuenster.pi.library.ejb.AgenciaService;
-import de.unimuenster.pi.library.ejb.BookService;
 import de.unimuenster.pi.library.jpa.Agencia;
-import de.unimuenster.pi.library.jpa.Book;
 
-/**
- * Servlet implementation class BookServlet.
- * 
- * Parameters: title, author, isbn
- * 
- * @author Henning Heitkoetter
- */
 @WebServlet("/AgenciaServlet")
 public class AgenciaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -56,6 +47,9 @@ public class AgenciaServlet extends HttpServlet {
 				else
 					out.println(cve.getMessage());
 			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		finally{
 			out.close();

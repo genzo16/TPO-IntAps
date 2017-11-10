@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import dtos.AgenciaDTO;
 import enums.EstadoAgencia;
 
 @Entity
@@ -23,6 +24,7 @@ public class Agencia implements java.io.Serializable {
 	private String direccion;
 	@Enumerated(EnumType.ORDINAL)
 	private EstadoAgencia estado;
+	private String mail;
 
 	public Agencia() {
 	}
@@ -44,10 +46,10 @@ public class Agencia implements java.io.Serializable {
 		this.estado = estado;
 	}
 
-	/*public AgenciaDTO toDTO() {
+	public AgenciaDTO toDTO() {
 		return new AgenciaDTO(id, nombre, direccion, estado);
 	}
-*/
+
 	@Override
 	public String toString() {
 		return "Agencia [id=" + id + ", nombre=" + nombre + ", direccion=" + direccion + ", estado=" + estado + "]";
@@ -85,5 +87,15 @@ public class Agencia implements java.io.Serializable {
 	public void setEstado(EstadoAgencia estado) {
 		this.estado = estado;
 	}
+
+	public String getMail() {
+		// TODO Auto-generated method stub
+		return mail;
+	}
+	
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
 
 }
