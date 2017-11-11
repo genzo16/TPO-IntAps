@@ -1,5 +1,13 @@
 package de.unimuenster.pi.library.jpa;
 
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Date;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonWriter;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -19,48 +27,70 @@ public class Agencia implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	@GeneratedValue(strategy=GenerationType.AUTO) 
 	@Id
-	private int id;
+	private int interID;
+	private String ID_Agencia;
 	private String nombre;
 	private String direccion;
 	@Enumerated(EnumType.ORDINAL)
-	private EstadoAgencia estado;
-	private String mail;
+	private EstadoAgencia estado_solicitud;
+	private String ID_Solicitud;
+	private Date fecha;
+	private String url;
 
 	public Agencia() {
 	}
 
 	public Agencia(String nombre, String direccion) {
 		super();
-		this.estado = EstadoAgencia.PENDIENTE_DE_ACTIVACION;
+		this.estado_solicitud = EstadoAgencia.PENDIENTE_DE_ACTIVACION;
 		this.nombre = nombre;
 		this.direccion = direccion;
 	}
 	
-	
-
-	public Agencia(int id, String nombre, String direccion, EstadoAgencia estado) {
+	public Agencia(String ID_Agencia, String nombre, String direccion, EstadoAgencia estado) {
 		super();
-		this.id = id;
+		this.ID_Agencia = ID_Agencia;
+		this.estado_solicitud = estado;
 		this.nombre = nombre;
 		this.direccion = direccion;
-		this.estado = estado;
 	}
+	
 
-	public AgenciaDTO toDTO() {
-		return new AgenciaDTO(id, nombre, direccion, estado);
+	public Agencia(String ID_Agencia, String nombre, String direccion, EstadoAgencia estado,
+			String ID_Solicitud, Date fecha, String url) {
+		super();
+		this.ID_Agencia = ID_Agencia;
+		this.nombre = nombre;
+		this.direccion = direccion;
+		this.estado_solicitud = estado;
+		this.ID_Solicitud = ID_Solicitud;
+		this.fecha = fecha;
+		this.url = url;
+				
+		
 	}
-
-	@Override
+	public int getInterID(){
+		return interID;
+	}
+	
+	public void setInterID(int id){
+		this.interID = id;
+	}
+	/*public AgenciaDTO toDTO() {
+		return new AgenciaDTO(ID_Agencia, nombre, direccion, estado_solicitud);
+	}
+*/
+	/*@Override
 	public String toString() {
 		return "Agencia [id=" + id + ", nombre=" + nombre + ", direccion=" + direccion + ", estado=" + estado + "]";
-	}
+	}*/
 	
-	public int getIdAgencia() {
-		return id;
+	public String getIdAgencia() {
+		return ID_Agencia;
 	}
 
-	public void setIdAgencia(int idAgencia) {
-		this.id = idAgencia;
+	public void setIdAgencia(String idAgencia) {
+		this.ID_Agencia = idAgencia;
 	}
 
 	public String getNombre() {
@@ -81,21 +111,54 @@ public class Agencia implements java.io.Serializable {
 
 
 	public EstadoAgencia getEstado() {
-		return estado;
+		return estado_solicitud;
 	}
 
 	public void setEstado(EstadoAgencia estado) {
-		this.estado = estado;
-	}
-
-	public String getMail() {
-		// TODO Auto-generated method stub
-		return mail;
+		this.estado_solicitud = estado;
 	}
 	
-	public void setMail(String mail) {
-		this.mail = mail;
+	public String getIdSolicitud() {
+		return ID_Solicitud;
 	}
 
+	public void setIdSolicitud(String idSolicitud) {
+		this.ID_Solicitud = idSolicitud;
+	}
+	
+	public Date getFecha() {
+		return this.fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+	
+	public String getUrl() {
+		return this.url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public AgenciaDTO toDTO() {
+		return new AgenciaDTO(this.ID_Agencia, this.nombre, this.direccion, this.estado_solicitud, this.ID_Solicitud, this.fecha, this.url );
+	}
+	static Agencia getAgencia (String jsonString) {
+		
+        JsonReader reader = Json.createReader(new StringReader(jsonString));
+        JsonObject personObject = reader.readObject();
+		reader.close();
+		         
+		Agencia a = new Agencia();
+		a.setIdAgencia(personObject.getString("ID_Agencia"));
+		a.setNombre(personObject.getString("nombre"));
+		a.setDireccion(personObject.getString("direccion"));
+		a.setEstado(EstadoAgencia.PENDIENTE_DE_ACTIVACION);
+		a.setFecha((Date)personObject.get("fecha"));
+		a.setUrl(personObject.getString("url"));
+
+		return a;
+	}
 
 }

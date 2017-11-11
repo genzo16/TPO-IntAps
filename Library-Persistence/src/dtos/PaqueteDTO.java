@@ -1,14 +1,12 @@
 package dtos;
 
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonWriter;
 
 import de.unimuenster.pi.library.jpa.Paquete;
 
@@ -18,29 +16,44 @@ public abstract class PaqueteDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int 			id;
 	private String 			nombre;
+	private String  		foto;  
+	private int  			cant_personas;
+	private float   		precio_persona;
 	private String 			descripcion;
 	private Date   			fecha_hasta;
 	private Date 			fecha_desde;	     
-	private AgenciaDTO 		agencia;
+	private String  		politica_cancelacion;
+	private String		mapa_destino_paquete;
+
+	private String 		agencia;
 	private String 		destino;
 	private String   		estado; 
 	private int   			cupo;
+	private String 	servicios;
+	private String medios; 	
 		
 	public PaqueteDTO() {
 		super();
 	}
 	
 	public PaqueteDTO(String nombre, String descripcion, Date fecha_desde, Date fecha_hasta,
-			AgenciaDTO agencia,String destino, String estado, int cupo) {
+			int cant_personas, float precio_persona, String foto, String politica_cancelacion, String agencia,
+			String destino, String estado, int cupo, String servicios, String medios) {
 		super();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.fecha_desde = fecha_desde;
 		this.fecha_hasta = fecha_hasta;
+		this.cant_personas = cant_personas;
+		this.precio_persona = precio_persona;
+		this.foto = foto;
+		this.politica_cancelacion = politica_cancelacion;
 		this.agencia = agencia;
 		this.destino = destino;
 		this.estado = estado;
 		this.cupo = cupo;
+		this.servicios = servicios;
+		this.medios = medios;
 	}
 
 		
@@ -74,10 +87,10 @@ public abstract class PaqueteDTO implements Serializable{
 		public void setfecha_hasta(Date fecha_hasta) {
 			this.fecha_hasta = fecha_hasta;
 		}
-		public AgenciaDTO getAgencia() {
+		public String getAgencia() {
 			return agencia;
 		}
-		public void setAgencia(AgenciaDTO agencia) {
+		public void setAgencia(String agencia) {
 			this.agencia = agencia;
 		}
 		public String getDestino() {
@@ -101,8 +114,86 @@ public abstract class PaqueteDTO implements Serializable{
 
 	
 	public abstract String getClassName();
-	public abstract String toJSONstring() throws Exception;
-	public abstract Paquete toEntity();
+	public String getJsonString () {
+		
+        JsonObject personObject = Json.createObjectBuilder()
+                .add("ID_Agencia", this.getid())
+                .add("NOMBRE", this.getNombre())
+                .add("CANTIDAD_PERSONAS", this.getCant_personas())
+                .add("FECHA_DESDE", this.getfecha_desde().toString())
+                .add("FECHA_HASTA", this.getfecha_hasta().toString())
+                .add("DESCRIPCION", this.getDescripcion())
+                .add("SERVICIOS", this.getServicios())
+                .add("PRECIO_POR_PERSONA", this.getPrecio_persona())
+                .add("MAPA_DESTINO_PAQUETE", this.getMapa_destino_paquete())
+                .add("POLITICAS_CANCELACION", this.getPolitica_cancelacion())
+                .add("DESTINO", this.getDestino())
+                .add("MEDIOS_DE_PAGO", this.getMedios())
+                .add("CUPOS RESTANTES", this.getCupo())
+                .build();
+         
+        StringWriter stringWriter = new StringWriter();
+        JsonWriter writer = Json.createWriter(stringWriter);
+        writer.writeObject(personObject);
+        writer.close();
+        return stringWriter.getBuffer().toString();
+	}	public abstract Paquete toEntity();
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
+	public int getCant_personas() {
+		return cant_personas;
+	}
+
+	public void setCant_personas(int cant_personas) {
+		this.cant_personas = cant_personas;
+	}
+
+	public float getPrecio_persona() {
+		return precio_persona;
+	}
+
+	public void setPrecio_persona(float precio_persona) {
+		this.precio_persona = precio_persona;
+	}
+
+	public String getPolitica_cancelacion() {
+		return politica_cancelacion;
+	}
+
+	public void setPolitica_cancelacion(String politica_cancelacion) {
+		this.politica_cancelacion = politica_cancelacion;
+	}
+
+	public String getServicios() {
+		return servicios;
+	}
+
+	public void setServicios(String servicios) {
+		this.servicios = servicios;
+	}
+
+	public String getMedios() {
+		return medios;
+	}
+
+	public void setMedios(String medios) {
+		this.medios = medios;
+	}
+
+	public String getMapa_destino_paquete() {
+		return mapa_destino_paquete;
+	}
+
+	public void setMapa_destino_paquete(String mapa_destino_paquete) {
+		this.mapa_destino_paquete = mapa_destino_paquete;
+	}
 	
 
 }
