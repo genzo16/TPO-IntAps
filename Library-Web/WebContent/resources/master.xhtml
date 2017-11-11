@@ -1,28 +1,55 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 <f:view>
-<ui:insert name="metadata" />
-<h:head>
-	<h:outputStylesheet name="default.css" />
-	<title><ui:insert name="title">Title</ui:insert></title>
-</h:head>
-<h:body> 
-	<div id="header"><ui:insert name="header"><h1>
-		<h:graphicImage name="logo.png" />
-		<span id="title">Oferta Paquete</span>
-	</h1></ui:insert></div>
-	<div id="navigation"><ui:insert name="navigation">
-		<ul>
-		<li><h:link outcome="/crearAgencia.xhtml">Crear Agencia</h:link></li>
-		<li><h:link outcome="/crearPaquete.xhtml">Crear Paquete</h:link></li>
-		<li><h:link outcome="/listAgencias.xhtml">Listar Agencias</h:link></li>
-		</ul>
-	</ui:insert></div>
-	<div id="content"><ui:insert name="content"></ui:insert></div>
-	<div id="footer"><ui:insert name="footer">&copy; Integracion de Aplicaciones</ui:insert></div>
-</h:body>
+	<ui:insert name="metadata" />
+	<h:head>
+		<!-- Bootstrap core CSS -->
+		<h:outputStylesheet name="bootstrap/css/bootstrap.min.css" />
+		<title><ui:insert name="title">Title</ui:insert></title>
+	</h:head>
+	<h:body style="background-image:url(resources/img/cancun.jpg)">
+
+		<div id="header">
+			<div class="panel panel-default">
+				<div class=".panel-primary">
+					<ui:insert name="header">
+						<h1>
+							<span id="title" class=".panel-primary text-primary text-centre">Oferta
+								Paquete</span>
+						</h1>
+					</ui:insert>
+				</div>
+			</div>
+		</div>
+		<div class="panel-group">
+			<div class=".panel-primary">
+				<div id="navigation">
+					<ui:insert name="navigation">
+						<ul>
+							<li class="text-white"><h:link outcome="/crearAgencia.xhtml"
+									class="text-white">Crear Agencia</h:link></li>
+							<li class="text-white"><h:link outcome="/crearPaquete.xhtml"
+									class="text-white">Crear Paquete</h:link></li>
+							<li class="text-white"><h:link outcome="/listAgencias.xhtml"
+									class="text-white">Listar Agencias</h:link></li>
+						</ul>
+					</ui:insert>
+				</div>
+
+			</div>
+		</div>
+
+		<div id="content">
+			<ui:insert name="content"></ui:insert>
+		</div>
+
+		<div id="footer" class="container-fluid text-left text-white bg-dark">
+			<ui:insert name="footer">&copy;Integracion de Aplicaciones 2017 - 2do Cuatrimestre</ui:insert>
+		</div>
+
+	</h:body>
 </f:view>
 </html>

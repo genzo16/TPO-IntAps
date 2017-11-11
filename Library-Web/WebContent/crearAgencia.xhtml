@@ -8,17 +8,16 @@
 	<ui:define name="content">
 	<div class="inputForm"><h:form>
 		<h:panelGrid columns="3" columnClasses="form-label,form-input,form-message error" footerClass="form-footer">
-			<h:outputLabel value="Nombre" for="nombre" />
+			<h:outputLabel class="text-white" value="Nombre" for="nombre" />
 			<h:inputText id="nombre" value="#{crearAgencia.agencia.nombre}"/>
 			<h:message for="nombre"/>
-			<h:outputLabel value="Direccion" for="direccion" />
+			<h:outputLabel class="text-white" value="Direccion" for="direccion" />
 			<h:inputText id="direccion" value="#{crearAgencia.agencia.direccion}" />
 			<h:message for="direccion"/>
 			<h:outputLabel value="Mail" for="mail" />
-			<h:message id="isbn-message" for="isbn"/>
-			<h:outputLabel value="Batch input?" for="batch" title="Crear otra Agencia despues de esta?"/>
+			<h:outputLabel value="Batch input?"  class="text-white" for="batch" title="Crear otra Agencia despues de esta?"/>
 			<h:selectBooleanCheckbox id="batch" value="#{crearAgencia.batch}" />
-			<f:facet name="footer"><h:commandButton value="Submit" action="#{crearAgencia.persist}" /></f:facet>
+			<f:facet name="footer"><h:commandButton value="Submit" class="btn-success" action="#{crearAgencia.persist}" /></f:facet>
 		</h:panelGrid>
 	</h:form></div>
 	<div class="result"><h:outputText rendered="#{not empty crearAgencia.lastResult}" styleClass="#{crearAgencia.success}" value="#{crearAgencia.lastResult}" /></div>

@@ -40,14 +40,14 @@ public class PaqueteServiceBean implements PaqueteService {
 			@WebParam(name = "destino") String destino,
 			@WebParam(name = "estado") String estado,
 			@WebParam(name = "cupo") int cupo){
-		Paquete newPaquete = new Paquete(nombre,descripcion,fechaDesde,fechaHasta,agencia,destino,estado,cupo);	
+		Paquete newPaquete = new Paquete();//(nombre,descripcion,fechaDesde,fechaHasta,agencia,destino,estado,cupo);	
 		return crearPaquete(newPaquete);
 	}
 
 	@Override
 	@WebMethod(exclude = true)
 	public Paquete crearPaquete(Paquete newPaquete) {
-		if (em.createQuery("SELECT COUNT(*) FROM Agencia WHERE nombre=:nombre", Long.class).setParameter("nombre", newPaquete.getNombre())
+		if (em.createQuery("SELECT COUNT(*) FROM Paquete WHERE nombre=:nombre", Long.class).setParameter("nombre", newPaquete.getNombre())
 				.getSingleResult() > 0)
 			throw new EJBException(new ConstraintViolationException(
 					"La Agencia ya existe", null));

@@ -3,39 +3,84 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core">
-	
-<ui:composition template="/resources/master.xhtml">
-	<ui:define name="title">Nuevo Paquete</ui:define>
+<h:head>
+	<h:outputStylesheet name="default.css" />
+	<title><ui:insert name="title">Title</ui:insert></title>
+	<!-- Theme Made By www.w3schools.com - No Copyright -->
+	<title>Bootstrap Theme Simply Me</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<link href="https://fonts.googleapis.com/css?family=Montserrat"
+		rel="stylesheet" />
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</h:head>
+
+<ui:composition template="/resources/master.xhtml">	<ui:define name="title">Nuevo Paquete</ui:define>
 	<ui:define name="content">
-	<div class="inputForm"><h:form>
-		<h:panelGrid columns="3" columnClasses="form-label,form-input,form-message error" footerClass="form-footer">
-			<h:outputLabel value="Nombre" for="nombre" />
-			<h:inputText id="nombre" value="#{crearPaquete.paquete.nombre}"/>
-			<h:message for="nombre"/>
-			<h:outputLabel value="descripcion" for="descripcion" />
-			<h:inputText id="descripcion" value="#{crearPaquete.paquete.descripcion}" />
-			<h:message for="descripcion"/>
-			<h:outputLabel value="fechaDesde" for="fechaDesde" />
-			<h:inputDate id="fechaDesde" value="#{crearPaquete.paquete.fechaDesde}" />
-			<h:message for="fechaDesde"/>
-			<h:outputLabel value="fechaHasta" for="fechaHasta" />
-			<h:inputDate id="fechaHasta" value="#{crearPaquete.paquete.fechaHasta}" />
-			<h:message for="fechaHasta"/>
-			<h:outputLabel value="agencia" for="agencia" />
-			<h:inputText id="agencia" value="#{crearPaquete.paquete.agencia}" />
-			<h:message for="agencia"/>
-			<h:outputLabel value="destino" for="destino" />
-			<h:inputText id="destino" value="#{crearPaquete.paquete.destino}" />
-			<h:message for="destino"/>
-			<h:outputLabel value="cupo" for="cupo" />
-			<h:inputText id="cupo" value="#{crearPaquete.paquete.cupo}" />
-			<h:message for="cupo"/>
-			<h:outputLabel value="Batch input?" for="batch" title="Crear otro Paquete despues de esta?"/>
-			<h:selectBooleanCheckbox id="batch" value="#{crearPaquete.batch}" />
-			<f:facet name="footer"><h:commandButton value="Submit" action="#{crearPaquete.persist}" /></f:facet>
-		</h:panelGrid>
-	</h:form></div>
-	<div class="result"><h:outputText rendered="#{not empty crearPaquete.lastResult}" styleClass="#{crearPaquete.success}" value="#{crearPaquete.lastResult}" /></div>
+		<div class="inputForm">
+			<h:form>
+				<h:panelGrid columns="3"
+					columnClasses="form-label,form-input,form-message error"
+					footerClass="form-footer">
+					<h:outputLabel class="text-white" value="Nombre" for="nombre" />
+					<h:inputText id="nombre" value="#{crearPaquete.paquete.nombre}" />
+					<h:message for="nombre" />
+					<h:outputLabel class="text-white" value="Descripción" for="descripcion" />
+					<h:inputText id="descripcion"
+						value="#{crearPaquete.paquete.descripcion}" />
+					<h:message for="descripcion" />
+					<h:outputLabel class="text-white" value="Fecha Desde:" for="fechaDesde" />
+					<div class="container">
+						<div class="row">Formatos Validos: yyyy-mm-dd, yyyymmdd,
+							dd-mm-yyyy, dd/mm/yyyy, ddmmyyyyy</div>
+						<br />
+						<div class="row">
+							<div class='col-sm-3'>
+								<div class="form-group">
+									<div class='input-group date' id='datetimepicker1'>
+										<input type='text' class="form-control" /> <span
+											class="input-group-addon"><span
+											class="glyphicon glyphicon-calendar"></span> </span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<h:inputText id="fechaDesde"
+						value="#{crearPaquete.paquete.fecha_desde}" />
+					<h:message for="fechaDesde" />
+					<h:outputLabel class="text-white" value="Fecha Hasta:" for="fechaHasta" />
+					<h:inputText id="fechaHasta"
+						value="#{crearPaquete.paquete.fecha_hasta}" />
+					<h:message for="fechaHasta" />
+					<h:outputLabel class="text-white" value="Agencia" for="agencia" />
+					<h:inputText id="agencia" value="#{crearPaquete.paquete.agencia}" />
+					<h:message for="agencia" />
+					<h:outputLabel class="text-white" value="Destino" for="destino" />
+					<h:inputText id="destino" value="#{crearPaquete.paquete.destino}" />
+					<h:message for="destino" />
+					<h:outputLabel class="text-white" value="Cupo" for="cupo" />
+					<h:inputText id="cupo" value="#{crearPaquete.paquete.cupo}" />
+					<h:message for="cupo" />
+					<h:outputLabel value="Batch input?" for="batch"
+						title="Crear otro Paquete despues de esta?" />
+					<h:selectBooleanCheckbox id="batch" value="#{crearPaquete.batch}" />
+					<f:facet name="footer">
+						<h:commandButton value="Submit" action="#{crearPaquete.persist}" />
+					</f:facet>
+				</h:panelGrid>
+			</h:form>
+		</div>
+		<div class="result">
+			<h:outputText rendered="#{not empty crearPaquete.lastResult}"
+				styleClass="#{crearPaquete.success}"
+				value="#{crearPaquete.lastResult}" />
+		</div>
 	</ui:define>
 </ui:composition>
 </html>

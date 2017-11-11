@@ -15,9 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
-import de.unimuenster.pi.library.ejb.AgenciaService;
 import de.unimuenster.pi.library.ejb.PaqueteService;
-import de.unimuenster.pi.library.jpa.Agencia;
 import de.unimuenster.pi.library.jpa.Paquete;
 
 @WebServlet("/PaqueteServlet")

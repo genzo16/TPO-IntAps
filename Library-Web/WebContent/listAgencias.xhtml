@@ -11,7 +11,7 @@
 	<div id="bookcount">
 		Numero de Agencias: #{fn:length(listAgencias.agencia)}
 	</div>
-	<div class="data"><h:dataTable rendered="#{fn:length(listAgencias.agencia) > 0}" 
+	<div class="data"><h:dataTable rendered="#{fn:length(listAgencias.agencias) > 0}" 
 		value="#{listAgencias.agencia}" var="cur"
 		styleClass="data-table" 
 		columnClasses="data-cell,data-cell,data-cell,data-cell,data-cell"

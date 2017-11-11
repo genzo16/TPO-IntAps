@@ -5,9 +5,7 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.faces.bean.ManagedBean;
 
-import de.unimuenster.pi.library.ejb.AgenciaService;
 import de.unimuenster.pi.library.ejb.PaqueteService;
-import de.unimuenster.pi.library.jpa.Agencia;
 import de.unimuenster.pi.library.jpa.Paquete;
 import de.unimuenster.pi.library.web.Util;
 

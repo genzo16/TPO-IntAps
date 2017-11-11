@@ -2,7 +2,11 @@ package de.unimuenster.pi.library.ejb;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.ejb.EJBException;
@@ -20,17 +24,15 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
-import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 
 
 import de.unimuenster.pi.library.jpa.Agencia;
 import dtos.AgenciaDTO;
+import dtos.SolicitudDTO;
 import enums.EstadoAgencia;
 
 @Stateless
@@ -48,6 +50,13 @@ public class AgenciaServiceBean implements AgenciaService {
 		if (agencia == null) {
 			try {
 				agencia = new Agencia(nombre, direccion);
+				String idAgencia = "";
+				if(obtenerIDAgencia() < 10)
+					idAgencia = "G07_0000000" + obtenerIDAgencia();
+				else
+					idAgencia = "G07_000000" + obtenerIDAgencia();
+				agencia.setIdAgencia(idAgencia);
+				agencia.setIdSolicitud(idAgencia);
 				manager.persist(agencia);
 				//sendPostToBackOffice(agencia.toDTO());
 			} catch (Exception e) {
@@ -56,7 +65,26 @@ public class AgenciaServiceBean implements AgenciaService {
 		}
 		return agencia;
 	}
+	public int obtenerIDAgencia(){
+		Integer maxID = manager.createQuery("SELECT MAX(interID) FROM Agencia", Integer.class)
+		.getSingleResult();
+		System.out.println("MAXIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD: "+ maxID);
+		if(maxID != null)
+			return maxID+1;
+		else
+			return	1;
+		
+	}
 	
+	public int obtenerIDSolicitud(){
+		int maxID = manager.createQuery("SELECT MAX(interID) FROM Agencia", Integer.class)
+		.getSingleResult();
+		if (maxID > 0)
+			return maxID;
+		else
+			return	1;
+		
+	}
 	/*@POST
 	@Path("/{nombre}/{direccion}")
 	public Agencia crearAgencia(Agencia agencia) throws Exception {
@@ -73,35 +101,39 @@ public class AgenciaServiceBean implements AgenciaService {
 	@Override
 	@WebMethod(exclude = true)
 	public Agencia crearAgencia(Agencia agencia) throws Exception {
-		if (manager.createQuery("SELECT COUNT(*) FROM Agencia WHERE nombre=:nombre", Long.class).setParameter("nombre", agencia.getNombre())
-				.getSingleResult() > 0)
-			throw new EJBException(new ConstraintViolationException(
-					"La Agencia ya existe", null));
+		String idAgencia = "";
+		if(obtenerIDAgencia() < 10)
+			idAgencia = "G07_0000000" + obtenerIDAgencia();
+		else
+			idAgencia = "G07_000000" + obtenerIDAgencia();
+		agencia.setIdAgencia(idAgencia);
+		agencia.setIdSolicitud(idAgencia);
+		agencia.setFecha(Calendar.getInstance().getTime());
 		agencia.setEstado(EstadoAgencia.PENDIENTE_DE_ACTIVACION);
+		agencia.setUrl("http://192.168.0.107:8080/jax-rs-example/rest/service/SolicitudEstablecimiento");
 		manager.persist(agencia);
-		//sendPostToBackOffice(agencia.toDTO());
+		sendPostToBackOffice(agencia.toDTO());
 		return agencia;
 	}
 	
 	private void sendPostToBackOffice(AgenciaDTO agencia) {
-		try{
-		URL url = new URL("http://192.168.0.102:8080/BackOfficeJAXRS/rest/ofertaPaquete/solicitudAgencia"); //Cambiar URL
-		/*ResteasyClient client = new ResteasyClientBuilder().build();
-		Response response = client.target(URI_BOOK).request().post(Entity.entity(agencia, MediaType.APPLICATION_JSON));
-		}*/
-		HttpURLConnection urlConnection = (HttpURLConnection)
-		url.openConnection();
-		urlConnection.setDoOutput(true);
-		urlConnection.setRequestMethod("POST");
-		urlConnection.setRequestProperty("Content-Type", "application/json");
-		IOUtils.write("Hola Probando", urlConnection.getOutputStream());
-		if(urlConnection.getResponseCode() != 200)
-			throw new RuntimeException("Error de conexion"+ urlConnection.getResponseCode());
-		
-		String response = IOUtils.toString(urlConnection.getInputStream());
-		System.out.println("Respuesta POST: "+ response);
-		}catch(Exception e){
-			
+		try {
+			URL url = new URL("http://192.168.0.101:8080/BackOfficeJAXRS/rest/ofertaPaquete/solicitudAgencia"); // Cambiar
+																												// URL
+			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection.setDoOutput(true);
+			urlConnection.setRequestMethod("POST");
+			urlConnection.setRequestProperty("Content-Type", "text/plain");
+			System.out.println("JSONaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: " + agencia.toJSONstring());
+
+			IOUtils.write(agencia.toJSONstring(), urlConnection.getOutputStream());
+			if (urlConnection.getResponseCode() != 200)
+				throw new RuntimeException("Error de conexion" + urlConnection.getResponseCode());
+
+			String response = IOUtils.toString(urlConnection.getInputStream());
+			System.out.println("Respuesta POST: " + response);
+		} catch (Exception e) {
+
 		}
 	}
 
@@ -119,9 +151,11 @@ public class AgenciaServiceBean implements AgenciaService {
 	@POST
 	@Path("/validacionAgencia")
 	@Consumes("application/json")
-	public Response validacionAgencia(AgenciaDTO agencia) {
-		Agencia a = new Agencia(agencia.getIdAgencia(),agencia.getNombre(),agencia.getDireccion(),EstadoAgencia.ACTIVA);
-		manager.merge(a);
+	public Response validacionAgencia(SolicitudDTO solicitud) {
+		Agencia agencia = (Agencia) manager.createQuery("FROM Agencia WHERE ID_Solicitud = :ID_Solicitud")
+				.setParameter("ID_Solicitud", solicitud.getID_Solcitud()).getSingleResult();
+		agencia.setEstado(EstadoAgencia.ACTIVA);
+		manager.merge(agencia);
 		return Response.status(Response.Status.OK).entity("Mensjae Recibido").build();
 	}
 	
@@ -135,13 +169,7 @@ public class AgenciaServiceBean implements AgenciaService {
 		try {
 			agencias = (List<Agencia>) manager.createQuery("from Agencia").getResultList();
 			for (Agencia a : agencias) {
-				AgenciaDTO aux = null;
-				aux.setDireccion(a.getDireccion());
-				aux.setEstado(a.getEstado().toString());
-				aux.setIdAgencia(a.getIdAgencia());
-				aux.setMail(a.getMail());
-				aux.setNombre(a.getNombre());
-				agenciasDto.add(aux);
+				agenciasDto.add(a.toDTO());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
