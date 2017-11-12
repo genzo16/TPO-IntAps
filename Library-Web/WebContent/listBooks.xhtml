@@ -7,37 +7,6 @@
       xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 <ui:composition template="/resources/master.xhtml">
 	<ui:define name="title">Oferta Paquete</ui:define>
-	<ui:define name="content">
-	<div id="bookcount">
-		Number of books: #{fn:length(listBooks.books)}
-	</div>
-	<div class="data"><h:dataTable rendered="#{fn:length(listBooks.books) > 0}" 
-		value="#{listBooks.books}" var="cur"
-		styleClass="data-table" 
-		columnClasses="data-cell,data-cell,data-cell,data-cell,data-cell"
-		headerClass="data-cell header-cell">
-		<h:column>
-			<f:facet name="header">ID</f:facet>
-			#{cur.id}
-		</h:column>
-		<h:column>
-			<f:facet name="header">Title</f:facet>
-			#{cur.title}
-		</h:column>
-		<h:column>
-			<f:facet name="header">Author</f:facet>
-			#{cur.author}
-		</h:column>
-		<h:column>
-			<f:facet name="header">ISBN</f:facet>
-			#{cur.isbn}
-		</h:column>
-		<h:column>
-			<h:link outcome="/book.xhtml" value="Details">
-				<f:param name="id" value="#{cur.id}" />
-			</h:link>
-		</h:column>
-	</h:dataTable></div>
-	</ui:define>
+>
 </ui:composition>
 </html>

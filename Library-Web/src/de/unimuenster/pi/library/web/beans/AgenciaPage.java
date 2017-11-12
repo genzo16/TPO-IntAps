@@ -1,7 +1,5 @@
 package de.unimuenster.pi.library.web.beans;
 
-import java.util.Collection;
-
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.faces.bean.ManagedBean;

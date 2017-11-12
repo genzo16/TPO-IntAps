@@ -8,11 +8,11 @@
 <ui:composition template="/resources/master.xhtml">
 	<ui:define name="title">Listar Agencias</ui:define>
 	<ui:define name="content">
-	<div id="bookcount">
-		Numero de Agencias: #{fn:length(listAgencias.agencia)}
+	<div id="bookcount" class="text-white">
+		Numero de Agencias: #{fn:length(listAgencias.agencias)}
 	</div>
 	<div class="data"><h:dataTable rendered="#{fn:length(listAgencias.agencias) > 0}" 
-		value="#{listAgencias.agencia}" var="cur"
+		value="#{listAgencias.agencias}" var="cur"
 		styleClass="data-table" 
 		columnClasses="data-cell,data-cell,data-cell,data-cell,data-cell"
 		headerClass="data-cell header-cell">

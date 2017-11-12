@@ -14,13 +14,16 @@
 		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 	<link href="https://fonts.googleapis.com/css?family=Montserrat"
 		rel="stylesheet" />
+
+		 <h:outputScript library="js" name="formatDatePicker.js" />
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </h:head>
 
-<ui:composition template="/resources/master.xhtml">	<ui:define name="title">Nuevo Paquete</ui:define>
+<ui:composition template="/resources/master.xhtml">
+	<ui:define name="title">Nuevo Paquete</ui:define>
 	<ui:define name="content">
 		<div class="inputForm">
 			<h:form>
@@ -30,31 +33,19 @@
 					<h:outputLabel class="text-white" value="Nombre" for="nombre" />
 					<h:inputText id="nombre" value="#{crearPaquete.paquete.nombre}" />
 					<h:message for="nombre" />
-					<h:outputLabel class="text-white" value="Descripción" for="descripcion" />
+					<h:outputLabel class="text-white" value="Descripción"
+						for="descripcion" />
 					<h:inputText id="descripcion"
 						value="#{crearPaquete.paquete.descripcion}" />
 					<h:message for="descripcion" />
-					<h:outputLabel class="text-white" value="Fecha Desde:" for="fechaDesde" />
-					<div class="container">
-						<div class="row">Formatos Validos: yyyy-mm-dd, yyyymmdd,
-							dd-mm-yyyy, dd/mm/yyyy, ddmmyyyyy</div>
-						<br />
-						<div class="row">
-							<div class='col-sm-3'>
-								<div class="form-group">
-									<div class='input-group date' id='datetimepicker1'>
-										<input type='text' class="form-control" /> <span
-											class="input-group-addon"><span
-											class="glyphicon glyphicon-calendar"></span> </span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<h:inputText id="fechaDesde"
-						value="#{crearPaquete.paquete.fecha_desde}" />
+					<h:outputLabel class="text-white" value="Fecha Desde:"
+						for="fechaDesde" />
+				<h:inputText  id="fechaDesde"
+						value="#{crearPaquete.paquete.fecha_desde}"
+						styleClass="form-control datepicker" />
 					<h:message for="fechaDesde" />
-					<h:outputLabel class="text-white" value="Fecha Hasta:" for="fechaHasta" />
+					<h:outputLabel class="text-white" value="Fecha Hasta:"
+						for="fechaHasta" />
 					<h:inputText id="fechaHasta"
 						value="#{crearPaquete.paquete.fecha_hasta}" />
 					<h:message for="fechaHasta" />
@@ -67,11 +58,12 @@
 					<h:outputLabel class="text-white" value="Cupo" for="cupo" />
 					<h:inputText id="cupo" value="#{crearPaquete.paquete.cupo}" />
 					<h:message for="cupo" />
-					<h:outputLabel value="Batch input?" for="batch"
+					<h:outputLabel class="text-white" value="Cargar Otro?" for="batch"
 						title="Crear otro Paquete despues de esta?" />
 					<h:selectBooleanCheckbox id="batch" value="#{crearPaquete.batch}" />
 					<f:facet name="footer">
-						<h:commandButton value="Submit" action="#{crearPaquete.persist}" />
+						<h:commandButton value="Crear" class="btn-success"
+							action="#{crearPaquete.persist}" />
 					</f:facet>
 				</h:panelGrid>
 			</h:form>
