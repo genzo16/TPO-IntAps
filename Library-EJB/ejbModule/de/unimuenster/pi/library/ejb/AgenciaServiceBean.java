@@ -31,8 +31,8 @@ import org.apache.commons.io.IOUtils;
 
 
 import de.unimuenster.pi.library.jpa.Agencia;
-import dtos.AgenciaDTO;
 import dtos.SolicitudDTO;
+import dtos.AgenciaDTO;
 import enums.EstadoAgencia;
 
 @Stateless
@@ -124,9 +124,9 @@ public class AgenciaServiceBean implements AgenciaService {
 			urlConnection.setDoOutput(true);
 			urlConnection.setRequestMethod("POST");
 			urlConnection.setRequestProperty("Content-Type", "text/plain");
-			System.out.println("JSONaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: " + agencia.toJSONstring());
+			System.out.println("JSONaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: " + agencia.getJsonString());
 
-			IOUtils.write(agencia.toJSONstring(), urlConnection.getOutputStream());
+			IOUtils.write(agencia.getJsonString(), urlConnection.getOutputStream());
 			if (urlConnection.getResponseCode() != 200)
 				throw new RuntimeException("Error de conexion" + urlConnection.getResponseCode());
 

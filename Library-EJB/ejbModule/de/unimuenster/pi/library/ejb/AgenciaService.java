@@ -6,8 +6,8 @@ import javax.ejb.Remote;
 import javax.ws.rs.core.Response;
 
 import de.unimuenster.pi.library.jpa.Agencia;
-import dtos.AgenciaDTO;
 import dtos.SolicitudDTO;
+import dtos.AgenciaDTO;
 
 @Remote
 public interface AgenciaService {
