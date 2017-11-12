@@ -1,0 +1,31 @@
+package com.example;
+import java.io.StringReader;
+
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
+
+@Path("/service")
+public class JAXRSExample {
+	
+	@POST
+	@Path("/SolicitudEstablecimiento")
+	@Consumes({ "text/plain" })
+	public Response procesarSolicitud(String establecimiento) {
+		//CONVERCION DE MENSAJE.
+		JsonReader reader = Json.createReader(new StringReader(establecimiento));
+	    JsonObject servicioJson = reader.readObject();
+		reader.close();	         
+		
+		System.out.println(servicioJson.getString("ID_Solicitud"));
+		System.out.println(servicioJson.getString("Estado_Solicitud"));
+
+
+		//MANEJO DE SOLICITUD.
+		
+		//MENSAJE RECIBIDO.
+		return Response.status(Response.Status.OK).entity("Mensaje Recibido").build();
+	}
+	
+}

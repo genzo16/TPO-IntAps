@@ -1,0 +1,42 @@
+package facade;
+
+import java.util.List;
+
+import javax.ejb.Remote;
+
+import dtos.*;
+import entities.*;
+
+@Remote
+public interface FacadeRemote {
+	
+	public ModaDTO buscarModa(int codigo);
+	public MuebleDTO buscarMueble(int codigo);
+	public ElectrodomesticoDTO buscarElectrodomestico(int codigo);
+	public NiñosDTO buscarNiños(int codigo);
+	public void crearElectrodomestico(ElectrodomesticoDTO dto);
+	public void crearModa(ModaDTO dto);
+	public void crearMueble(MuebleDTO dto);
+	public void crearNiños(NiñosDTO niñosNuevo);
+	public boolean validarCodigo(String codigo);
+	public List<ElectrodomesticoDTO> listarElectrodomesticos();
+	public List<ModaDTO> listarModa();
+	public List<MuebleDTO> listarMueble();
+	public List<NiñosDTO> listarNiños();
+	public void update(int codigo, int stock);
+	public Electrodomestico electrodomestico(int codigo);
+	public Moda moda(int codigo);
+	public Mueble mueble(int codigo);
+	public Niños niños(int codigo);
+	public List<SolicitudArticulosDespachoDTO> listarSolicitudesPendientes();
+	public SolicitudArticulosDespachoDTO buscarSolicitud(int codigoSol);
+	public String devolverTipo(String codigo);
+	public Articulo buscarArticulo(int codigo);
+	public void altaSolicitud(SolicitudArticulosDespacho sol);
+	public int altaSolicitudCompra(SolicitudCompraFabricaDTO compra);
+	public SolicitudCompraFabricaDTO buscarSolicitudCompra(int codSolCompra);
+	public void actualizarSolicitud(SolicitudArticulosDespachoDTO solicitud);
+	public ConfigMensajes obtenerParametros(String tipo, String nombre);
+	public void insertarParametros(String tipo, String tipoenvio, String url, String destino, String metodo,
+			String nombre, String usuario, String password);
+}

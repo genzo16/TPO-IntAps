@@ -1,0 +1,13 @@
+package facade;
+
+import java.util.List;
+
+import javax.ejb.Remote;
+
+import dtos.*;
+
+@Remote
+public interface FacadeRemote {
+	
+	public void validarAgencia(SolicitudDTO solicitud);
+}

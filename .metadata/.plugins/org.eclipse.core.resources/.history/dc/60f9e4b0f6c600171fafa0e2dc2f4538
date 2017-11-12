@@ -1,0 +1,22 @@
+package com.example;
+
+@POST
+@Path("/SolicitudEstablecimiento")
+@Consumes({ "text/plain" })
+public Response procesarSolicitud(String establecimiento) {
+	//CONVERCION DE MENSAJE.
+	JsonReader reader = Json.createReader(new StringReader(establecimiento));
+    JsonObject servicioJson = reader.readObject();
+	reader.close();	         
+	
+	System.out.println(servicioJson.getString("ID_Solicitud"));
+	System.out.println(servicioJson.getString("Estado_Solicitud"));
+
+
+	//MANEJO DE SOLICITUD.
+	FacadeEstablecimientoRemote delegado = BusinessDelegate.getInstance();
+	delegado.aprobarSolicitud(servicioJson.getString("ID_Solicitud").substring(4), servicioJson.getString("Estado_Solicitud"));
+	
+	//MENSAJE RECIBIDO.
+	return Response.status(Response.Status.OK).entity("Mensaje Recibido").build();
+}

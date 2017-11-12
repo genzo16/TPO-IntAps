@@ -1,0 +1,34 @@
+package facade;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.*;
+
+import dtos.*;
+import entities.*;
+import sessionBeans.*;
+
+/**
+ * Session Bean implementation class Facade
+ */
+@Singleton
+@LocalBean
+public class Facade implements FacadeRemote,Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@EJB
+	AdministrarAgencias admAgencia;
+	
+    public Facade() {
+    }
+    
+	public void validarAgencia(SolicitudDTO dto) {
+		admAgencia.validarAgencia(dto);
+	}
+	
+}

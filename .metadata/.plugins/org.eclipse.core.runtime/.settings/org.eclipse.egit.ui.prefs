@@ -1,0 +1,5 @@
+CloneWizard_StoreInSecureStore=true
+commit_dialog_history_messages=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<messages>\r\n<message>Agregado el toJSon en los metodos de Agencia y AgenciaDTO&\#x0A;Agregados varios campos al objeto Agencia entre ellos la generacion del&\#x0A;Agencia_ID y Secuancia_ID&\#x0A;&\#x0A;</message>\r\n</messages>
+eclipse.preferences.version=1
+resourcehistory_graph_split=500,500
+resourcehistory_rev_split=700,300

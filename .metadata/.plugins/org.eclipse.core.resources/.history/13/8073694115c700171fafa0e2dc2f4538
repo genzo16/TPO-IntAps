@@ -1,0 +1,229 @@
+package facade;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.*;
+
+import dtos.*;
+import entities.*;
+import sessionBeans.*;
+
+/**
+ * Session Bean implementation class Facade
+ */
+@Singleton
+@LocalBean
+public class Facade implements FacadeRemote,Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@EJB
+	AdministrarProducto admProd;
+	@EJB
+	AdministrarSolicitudes admSol;
+	@EJB
+	AdministradorConexiones admCon;
+	
+    public Facade() {
+    }
+    
+    public NiñosDTO buscarNiños(int cod) {
+    	Niños o = (Niños) admProd.buscarProducto(Niños.class,cod);
+		if(o!=null)
+			return o.toDTO();
+		return null;
+	}
+    
+    public Niños niños(int cod) {
+    	return (Niños) admProd.buscarProducto(Niños.class,cod);
+	}
+    
+    public ModaDTO buscarModa(int codigo){
+		Moda o = (Moda) admProd.buscarProducto(Moda.class,codigo);
+		if(o!=null)
+			return o.toDTO();
+		return null;
+	}
+    
+    public Moda moda(int cod) {
+    	return (Moda) admProd.buscarProducto(Moda.class,cod);
+	}
+    
+    public MuebleDTO buscarMueble(int codigo){
+    	Mueble o = (Mueble) admProd.buscarProducto(Mueble.class,codigo);
+    	if(o!=null)
+			return o.toDTO();
+		return null;
+    }
+    
+    public Mueble mueble(int codigo){
+    	return (Mueble) admProd.buscarProducto(Mueble.class,codigo);
+    }
+    
+    public ElectrodomesticoDTO buscarElectrodomestico(int codigo){
+    	Electrodomestico o = (Electrodomestico) admProd.buscarProducto(Electrodomestico.class,codigo);
+    	if(o!=null)
+			return o.toDTO();
+		return null;
+    }
+    
+    public Electrodomestico electrodomestico(int codigo){
+    	return (Electrodomestico) admProd.buscarProducto(Electrodomestico.class,codigo);
+    }
+    
+    public void crearElectrodomestico(ElectrodomesticoDTO dto){
+    	admProd.altaElectrodomestico(dto);
+    }
+    
+    public void crearModa(ModaDTO dto){
+    	admProd.altaModa(dto);
+    }
+    
+    
+	public void crearMueble(MuebleDTO dto) {
+		admProd.altaMueble(dto);
+	}
+	
+	public void crearNiños(NiñosDTO dto) {
+		admProd.altaNiños(dto);
+	}
+    
+    public boolean validarCodigo(String codigo){
+    	//Devuelve true si no existe ningun Articulo con el codigo ingresado
+    	int cod = Integer.parseInt(codigo);
+    	if (buscarElectrodomestico(cod)==null)
+    		if (buscarModa(cod)==null)
+    			if(buscarMueble(cod)==null)
+    				if(buscarNiños(cod)==null)
+    				return true;
+    	return false;
+    }
+    
+    public String devolverTipo(String codigo){
+    	int cod = Integer.parseInt(codigo);
+    	if (buscarElectrodomestico(cod)!=null)
+    		return "Electrodomestico";
+    	if (buscarModa(cod)!=null)
+    		return "Moda";
+    	if(buscarMueble(cod)!=null)
+    		return "Mueble";
+    	if(buscarNiños(cod)!=null)
+    		return "Niños";
+    	return null;
+    }
+
+	public List<ElectrodomesticoDTO> listarElectrodomesticos(){
+    	List<Electrodomestico> items = admProd.listarElectro();
+    	List<ElectrodomesticoDTO> resultado = new ArrayList<ElectrodomesticoDTO>();
+    	for(Electrodomestico i: items)
+    		resultado.add(i.toDTO());
+    	return resultado;
+    }
+    
+    public List<ModaDTO> listarModa(){
+    	List<Moda> items = admProd.listarModa();
+    	List<ModaDTO> resultado = new ArrayList<ModaDTO>();
+    	for(Moda i: items)
+    		resultado.add(i.toDTO());
+    	return resultado;
+    }
+    
+    public List<MuebleDTO> listarMueble(){
+    	List<Mueble> items = admProd.listarMueble();
+    	List<MuebleDTO> resultado = new ArrayList<MuebleDTO>();
+    	for(Mueble i: items)
+    		resultado.add(i.toDTO());
+    	return resultado;
+    }
+    
+    @Override
+	public List<NiñosDTO> listarNiños() {
+    	List<Niños> items = admProd.listarNiños();
+    	List<NiñosDTO> resultado = new ArrayList<NiñosDTO>();
+    	for(Niños i: items)
+    		resultado.add(i.toDTO());
+    	return resultado;
+	}
+    
+    public Articulo buscarArticulo(int codigo){
+    	return admProd.buscarProducto(codigo);
+    }
+
+	@Override
+	public void update(int codigo, int stock) {
+		admProd.actualizarStock(codigo,stock);
+	}
+	
+	public void altaSolicitud(SolicitudArticulosDespacho sol){
+		admSol.crearSolicitud(sol);
+	}
+	public List<SolicitudArticulosDespachoDTO> listarSolicitudesPendientes(){
+		List<SolicitudArticulosDespachoDTO> lista = new ArrayList<SolicitudArticulosDespachoDTO>();
+		for(SolicitudArticulosDespacho solicitud: admSol.solicitudesPendientes())
+			lista.add(solicitud.toDTO());
+		return lista;
+	}
+
+	@Override
+	public SolicitudArticulosDespachoDTO buscarSolicitud(int codigoSol) {
+		SolicitudArticulosDespacho sol=	admSol.buscarSol(codigoSol);
+		if(sol !=null)
+			return sol.toDTO();
+		return null;
+	}
+
+	@Override
+	public int altaSolicitudCompra(SolicitudCompraFabricaDTO compra) {
+		return admSol.crearSolicitudCompra(compra);
+	}
+
+	@Override
+	public SolicitudCompraFabricaDTO buscarSolicitudCompra(int codSolCompra) {
+		SolicitudCompraFabrica sol = admSol.buscarSolicitudCompra(codSolCompra);
+		if(sol !=null)
+			return sol.toDTO();
+		return null;
+	}
+
+	public void agregarCompra(Articulo art, int stocktoadd) {
+		int stockactual = art.getStock();
+		art.setStock(stockactual+stocktoadd);
+		admProd.actualizarStock(art.getCodigo(), art.getStock());
+	}
+
+	public void actualizarSolicitud(SolicitudCompraFabricaDTO sol) {
+		SolicitudCompraFabrica solicitud = admSol.buscarSolicitudCompra(sol.getCodSolCompra());
+		solicitud.setEstado(sol.getEstado());
+		admSol.actualizarSolicitud(solicitud);		
+	}
+
+	@Override
+	public void actualizarSolicitud(SolicitudArticulosDespachoDTO solicitud) {
+		SolicitudArticulosDespacho sol = admSol.buscarSol(solicitud.getCodigoSolicitud());
+		sol.setEstado(solicitud.getEstado());
+		for(ItemSolicitudArticulos item:sol.getItems())
+			for(ItemSolicitudArticulosDTO it: solicitud.getItems())
+				if(item.getCodigoItemSolicitudArticulo()==it.getCodigoItemSolicitudArticulo()){
+					item.setCantidadEnviada(it.getCantidadEnviada());
+					break;
+				}
+		admSol.actualizarSolicitud(sol);
+	}
+
+	@Override
+	public ConfigMensajes obtenerParametros(String tipo, String nombre) {
+		return admCon.obtenerParametros(tipo,nombre);
+	}
+
+	@Override
+	public void insertarParametros(String tipo, String tipoenvio, String url, String destino, String metodo,
+			String nombre, String usuario, String password) {
+		ConfigMensajes config = new ConfigMensajes(tipo, nombre, url, usuario, password, destino, metodo, tipoenvio);
+		admCon.insertarParametros(config);
+	}
+	
+}

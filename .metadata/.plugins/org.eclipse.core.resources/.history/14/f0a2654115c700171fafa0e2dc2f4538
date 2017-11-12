@@ -1,0 +1,172 @@
+package sessionBeans;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.persistence.*;
+
+import org.jboss.logging.Logger;
+import dtos.ElectrodomesticoDTO;
+import dtos.ModaDTO;
+import dtos.MuebleDTO;
+import dtos.NiñosDTO;
+import entities.*;
+
+/**
+ * Session Bean implementation class AdministrarProducto
+ */
+@Stateless
+@LocalBean
+public class AdministrarProducto implements AdministrarProductoRemote, AdministrarProductoLocal, Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@PersistenceContext(unitName="MyPersistenceUnit")
+	private EntityManager em;
+	private static final Logger log = Logger.getLogger(AdministrarProducto.class);
+	
+    public AdministrarProducto() {
+    	
+    }
+    
+    @SuppressWarnings("unchecked")
+	public List<Articulo> listarProductos(){
+    	List<Articulo> lista = new ArrayList<Articulo>();
+    	Query q = em.createQuery("from Moda");
+    	for(Moda m: (List<Moda>)q.getResultList())
+    		lista.add(m);
+    	q = em.createQuery("from Electrodomestico");
+    	for(Electrodomestico m: (List<Electrodomestico>)q.getResultList())
+    		lista.add(m);
+    	q = em.createQuery("from Mueble");
+    	for(Mueble m: (List<Mueble>)q.getResultList())
+    		lista.add(m);
+    	if(lista.isEmpty())
+    		log.warn("No se encontraron productos.");
+    	return lista;
+    }    
+    
+    public List<String> listarTipoProductos(){
+    	List<String> tipos = new ArrayList<String>();
+    	tipos.add("Electrodomestico");
+    	tipos.add("Moda");
+    	tipos.add("Mueble");
+    	tipos.add("Niños");
+    	return tipos;
+    }
+    
+    // ALTA DE PRODUCTOS
+    
+    public void altaMueble(MuebleDTO dto){
+    	try{
+    		Mueble m = new Mueble(
+        			dto.getNombre(),dto.getCodigo(),dto.getDescripcion(),dto.getMarca(),dto.getPrecio(),
+        			dto.getOrigen(),dto.getFoto(),dto.getStock(),dto.getMaterial());
+    		em.persist(m);
+    	}catch(Exception e){
+    		log.error("Se produjo el siguiente error al crear el mueble: "+e);
+    	}
+    }
+    
+    public void altaNiños(NiñosDTO dto) {
+    	try{
+    		Niños n = new Niños(
+        			dto.getNombre(),dto.getCodigo(),dto.getDescripcion(),dto.getMarca(),dto.getPrecio(),
+        			dto.getOrigen(),dto.getFoto(),dto.getStock(),dto.getEdadRecomendada());
+    		em.persist(n);
+    	}catch(Exception e){
+    		log.error("Se produjo el siguiente error al crear el articulo para Niños: "+e);
+    	}
+	}
+    
+    public void altaModa(ModaDTO dto){
+    	try{
+    		Moda m = new Moda(dto.getNombre(),dto.getCodigo(),dto.getDescripcion(),dto.getMarca(),dto.getPrecio(),
+        			dto.getOrigen(),dto.getFoto(),dto.getStock(),dto.getColor(),dto.getTalle());
+    		em.persist(m);
+    	}catch(Exception e){
+    		log.error("Se produjo el siguiente error al crear la moda: "+e);
+    	}
+    }
+    
+    public void altaElectrodomestico(ElectrodomesticoDTO dto){
+    	try{
+    		log.info("entre en alta de electrodomestico");
+    		Electrodomestico e = new Electrodomestico(
+        			dto.getNombre(),dto.getCodigo(),dto.getDescripcion(),dto.getMarca(),dto.getPrecio(),
+        			dto.getOrigen(),dto.getFoto(),dto.getStock(),dto.getFichaTecnica());
+    		em.persist(e);
+    		
+    	}catch(Exception e){
+    		log.error("Se produjo el siguiente error al crear el electrodomestico: "+e);
+    	}
+    }
+    
+    //Funciones de busqueda
+    
+    public Articulo buscarProducto(int codigo){
+		return em.find(Articulo.class, codigo);
+    }
+    @SuppressWarnings({"unchecked","rawtypes"})
+	public Articulo buscarProducto(Class clase,int codigo){
+		return (Articulo) em.find(clase, codigo);
+    }
+    
+    @SuppressWarnings("unchecked")
+	public List<Niños> listarNiños() {
+    	return (List<Niños>) em.createQuery("from Niños").getResultList();
+	}
+    @SuppressWarnings("unchecked")
+    public List<Electrodomestico> listarElectro(){
+    	return (List<Electrodomestico>) em.createQuery("from Electrodomestico").getResultList();
+    }
+    @SuppressWarnings("unchecked")
+    public List<Moda> listarModa(){
+    	return (List<Moda>) em.createQuery("from Moda").getResultList();
+    }
+    @SuppressWarnings("unchecked")
+    public List<Mueble> listarMueble(){
+    	return (List<Mueble>) em.createQuery("from Mueble").getResultList();
+    }
+
+	public void actualizar(MuebleDTO mueble) {
+		try{
+		em.merge(mueble);
+		}catch(Exception e){
+    		log.error("Se produjo el siguiente error al actualizar el mueble: "+e);
+    	}
+	}
+
+	public void actualizarStock(int codigo, int stock) {
+		try{
+			Electrodomestico e = (Electrodomestico) this.buscarProducto(Electrodomestico.class,codigo);
+			if(e!=null){
+				e.setStock(stock);
+				em.merge(e);
+			}else{
+				Moda moda = (Moda) this.buscarProducto(Moda.class,codigo);
+				if(moda!=null){
+					moda.setStock(stock);
+					em.merge(moda);
+				}else{
+					Mueble mueble = (Mueble) this.buscarProducto(Mueble.class,codigo);
+					if(mueble!=null){
+					mueble.setStock(stock);
+					em.merge(mueble);
+					}else{
+						Niños niños = (Niños) this.buscarProducto(Niños.class, codigo);
+						niños.setStock(stock);
+						em.merge(niños);
+					}
+				}
+			}
+		}catch(Exception e){
+	    		log.error("Se produjo el siguiente error al actualizar el Articulo "+codigo+" : "+e);
+	    }
+	}
+}

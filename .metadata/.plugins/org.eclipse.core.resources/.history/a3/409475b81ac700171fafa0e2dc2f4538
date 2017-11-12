@@ -1,0 +1,59 @@
+package com.example;
+
+import java.util.Hashtable;
+import java.util.Properties;
+
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+public class ProductorMensajeria {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Context context;
+		try {
+		    final Properties env = new Properties();
+            env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
+            env.put(Context.PROVIDER_URL, System.getProperty(Context.PROVIDER_URL, "http-remoting://localhost:8080"));
+            env.put(Context.SECURITY_PRINCIPAL, System.getProperty("username", "user1"));
+            env.put(Context.SECURITY_CREDENTIALS, System.getProperty("password", "user1"));
+            context = new InitialContext(env);
+ 
+            // Perform the JNDI lookups
+            String connectionFactoryString = System.getProperty("connection.factory", "jms/RemoteConnectionFactory");
+            ConnectionFactory connectionFactory = (ConnectionFactory) context.lookup(connectionFactoryString);
+ 
+            String destinationString = System.getProperty("destination", "java:/jms/queue/ColaTestIA");
+            Destination destination = (Destination) context.lookup(destinationString);
+ 
+            // Create the JMS connection, session, producer, and consumer
+            Connection connection = connectionFactory.createConnection(System.getProperty("username", "user1"), System.getProperty("password", "user1"));
+            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+           // consumer = session.createConsumer(destination);
+            connection.start();
+			// crear un producer para enviar mensajes usando la session
+			MessageProducer producer = session.createProducer(destination);
+			// crear un mensaje de tipo text y setearle el contenido
+			TextMessage message = session.createTextMessage();
+			message.setText("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+			//message.setText("{\"ID_Hotel\": \"G01_00000067\",\"Nombre\": \"Hotel Integracion\",\"Destino\": \"Buenos Aires\",\"Direccion\": \"Av. Cordoba 1789\",\"Estado\": \"INICIAL\",\"Descripcion\": \"Hotel muy bien ubicado y muy bonito\",\"Servicios\": [\"Piscina\", \"Desayuno\"],\"FotoHotel\": \"http://webirix.com/wp-content/uploads/2014/08/hilton.jpg\",\"FotoMapa\": \"http://webirix.com/wp-content/uploads/2014/08/hilton.jpg\",\"PoliticaCancelacion\": \"Se puede cancelar hasta el dia anterior a la reserva\",\"Habitaciones\":[{\"ID_Habitacion\": \"G01_0000007\",\"Descripcion\": \"Habitacion muy bonita\",\"URLFoto\" : \"http://webirix.com/wp-content/uploads/2014/08/hilton.jpg\",\"Servicios\":[\"WI-FI\",\"AC\"],\"TipoHabitacion\": \"CUADRUPLE\"  }],\"MediosDePago\": [\"Credito\", \"Deposito\", \"Cheque\"]}");
+			// enviar el mensaje
+			producer.send(message);
+			// TODO: recordar cerrar la session y la connection en un bloque “finally”
+			connection.close();
+		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+}

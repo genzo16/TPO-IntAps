@@ -1,0 +1,46 @@
+package sessionBeans;
+
+import java.io.Serializable;
+
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.jboss.logging.Logger;
+
+import de.unimuenster.pi.library.jpa.Agencia;
+import dtos.SolicitudDTO;
+import enums.EstadoAgencia;
+
+/**
+ * Session Bean implementation class AdministrarProducto
+ */
+@Stateless
+@LocalBean
+public class AdministrarAgencias implements AdministrarAgenciasRemote, AdministrarAgenciasLocal, Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private EntityManager manager;
+	private static final Logger log = Logger.getLogger(AdministrarAgencias.class);
+	
+    public AdministrarAgencias() {
+    	
+    }
+    
+   
+	public void validarAgencia(SolicitudDTO solicitud) {
+		Agencia agencia = (Agencia) manager.createQuery("FROM Agencia WHERE ID_Solicitud = :ID_Solicitud")
+				.setParameter("ID_Solicitud", solicitud.getID_Solcitud()).getSingleResult();
+		agencia.setEstado(EstadoAgencia.ACTIVA);
+		try{
+			manager.merge(agencia);
+		}catch(Exception e){
+    		log.error("Se produjo el siguiente error al actualizar la agencia: "+e);
+    	}
+	}
+
+}
