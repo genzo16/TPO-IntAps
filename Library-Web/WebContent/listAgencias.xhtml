@@ -11,7 +11,7 @@
 	<div id="bookcount" class="text-white">
 		Numero de Agencias: #{fn:length(listAgencias.agencias)}
 	</div>
-	<div class="data"><h:dataTable rendered="#{fn:length(listAgencias.agencias) > 0}" 
+	<div class="data text-white" ><h:dataTable rendered="#{fn:length(listAgencias.agencias) > 0}" 
 		value="#{listAgencias.agencias}" var="cur"
 		styleClass="data-table" 
 		columnClasses="data-cell,data-cell,data-cell,data-cell,data-cell"
@@ -30,7 +30,7 @@
 		</h:column>
 		<h:column>
 			<h:link outcome="/agencia.xhtml" value="Details">
-				<f:param name="id" value="#{cur.id}" />
+				<f:param name="idAgencia" value="#{cur.idAgencia}" />
 			</h:link>
 		</h:column>
 	</h:dataTable></div>
